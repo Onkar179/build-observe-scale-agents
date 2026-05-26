@@ -116,7 +116,6 @@ Setup order:
 ├── diagrams/
 │   └── architecture.mmd
 ├── docs/
-│   ├── linkedin-follow-up.md
 │   ├── mcp-client-integration.md
 │   ├── publishing-checklist.md
 │   ├── references.md

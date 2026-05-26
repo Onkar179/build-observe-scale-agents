@@ -17,4 +17,3 @@ Use this checklist before making the repository public.
 - [ ] Create the GitHub repository.
 - [ ] Push the first commit.
 - [ ] Create a GitHub release with the final PDF and optional PPTX.
-- [ ] Share the GitHub link in a LinkedIn follow-up post.

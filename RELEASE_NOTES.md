@@ -15,7 +15,6 @@ Includes:
 - Architecture diagram.
 - Session notes.
 - Publishing checklist.
-- LinkedIn follow-up draft.
 
 To attach to the GitHub release:
 
