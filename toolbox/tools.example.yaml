@@ -1,0 +1,76 @@
+sources:
+  billing-bigquery:
+    kind: bigquery
+    project: ${GCP_PROJECT_ID}
+
+tools:
+  get-cost-summary:
+    kind: bigquery-sql
+    source: billing-bigquery
+    description: Monthly Google Cloud billing summary by service.
+    parameters:
+      - name: invoice_month
+        type: string
+        description: Invoice month in YYYYMM format.
+    statement: |
+      SELECT
+        service.description AS service,
+        currency,
+        ROUND(SUM(cost + IFNULL((SELECT SUM(c.amount) FROM UNNEST(credits) c), 0)), 2) AS net_cost
+      FROM `${GCP_PROJECT_ID}.${BILLING_EXPORT_DATASET}.gcp_billing_export_v1_*`
+      WHERE invoice.month = @invoice_month
+      GROUP BY service, currency
+      ORDER BY net_cost DESC
+      LIMIT 10;
+
+  get-cost-by-project:
+    kind: bigquery-sql
+    source: billing-bigquery
+    description: Monthly Google Cloud billing breakdown by project.
+    parameters:
+      - name: invoice_month
+        type: string
+        description: Invoice month in YYYYMM format.
+    statement: |
+      SELECT
+        project.name AS project_name,
+        project.id AS project_id,
+        currency,
+        ROUND(SUM(cost + IFNULL((SELECT SUM(c.amount) FROM UNNEST(credits) c), 0)), 2) AS net_cost
+      FROM `${GCP_PROJECT_ID}.${BILLING_EXPORT_DATASET}.gcp_billing_export_v1_*`
+      WHERE invoice.month = @invoice_month
+      GROUP BY project_name, project_id, currency
+      ORDER BY net_cost DESC
+      LIMIT 10;
+
+  detect-cost-anomalies:
+    kind: bigquery-sql
+    source: billing-bigquery
+    description: Detect recent billing anomalies using a BigQuery ML forecast model.
+    parameters:
+      - name: invoice_month
+        type: string
+        description: Invoice month in YYYYMM format.
+    statement: |
+      SELECT
+        *
+      FROM ML.DETECT_ANOMALIES(
+        MODEL `${GCP_PROJECT_ID}.${BILLING_EXPORT_DATASET}.cost_forecast_model`,
+        STRUCT(0.95 AS anomaly_prob_threshold),
+        (
+          SELECT
+            usage_start_time AS time_series_timestamp,
+            SUM(cost + IFNULL((SELECT SUM(c.amount) FROM UNNEST(credits) c), 0)) AS net_cost
+          FROM `${GCP_PROJECT_ID}.${BILLING_EXPORT_DATASET}.gcp_billing_export_v1_*`
+          WHERE invoice.month = @invoice_month
+          GROUP BY usage_start_time
+        )
+      )
+      WHERE is_anomaly = TRUE
+      ORDER BY time_series_timestamp DESC;
+
+toolsets:
+  finops:
+    - get-cost-summary
+    - get-cost-by-project
+    - detect-cost-anomalies

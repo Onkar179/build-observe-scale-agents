@@ -1,0 +1,11 @@
+flowchart LR
+    attendee["Developer / Operator"] --> agent["FinBot ADK Agent"]
+    agent --> platform["Gemini Enterprise Agent Platform"]
+    platform --> toolbox["MCP Toolbox on Cloud Run"]
+    toolbox --> bq["BigQuery Billing Export"]
+    platform --> trace["Cloud Trace"]
+    platform --> logs["Cloud Logging"]
+    platform --> metrics["Cloud Monitoring"]
+
+    bq --> forecast["BigQuery ML Forecast / Anomaly Model"]
+    forecast --> toolbox
