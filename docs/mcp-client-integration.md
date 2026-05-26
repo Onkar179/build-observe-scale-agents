@@ -2,6 +2,8 @@
 
 The FinBot demo uses MCP Toolbox as the governed tool layer. You can use the same toolbox with Gemini CLI, local IDE agents, or any MCP-compatible client.
 
+In the session workflow, Gemini CLI was also used as an analysis client: it connected to Google Cloud context through MCP, inspected Agent Runtime observability traces, and compared token usage and latency across baseline and cached FinBot sessions.
+
 Official Gemini CLI MCP docs:
 
 - https://google-gemini.github.io/gemini-cli/docs/tools/mcp-server.html

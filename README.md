@@ -57,7 +57,9 @@ The demo shows how an agent can combine:
 - Gemini Enterprise Agent Platform for deployment.
 - Cloud Trace, Cloud Logging and Cloud Monitoring for observability.
 
-You can also connect the same MCP Toolbox layer directly to Gemini CLI or an MCP-compatible AI IDE. See [docs/mcp-client-integration.md](docs/mcp-client-integration.md).
+The token and latency analysis was also explored as an agentic workflow in Gemini CLI, using MCP-connected Google Cloud context to inspect Agent Runtime traces turn by turn and compare baseline vs cached sessions.
+
+You can connect the same MCP Toolbox layer directly to Gemini CLI or an MCP-compatible AI IDE. See [docs/mcp-client-integration.md](docs/mcp-client-integration.md).
 
 ## Prerequisites
 
@@ -109,27 +111,38 @@ Setup order:
 .
 ├── README.md
 ├── assets/
+│   ├── README.md
 │   ├── finbot-architecture.png
 │   └── finbot-observability-results.png
 ├── slides/
 │   └── README.md
 ├── diagrams/
+│   ├── README.md
 │   └── architecture.mmd
 ├── docs/
+│   ├── README.md
 │   ├── mcp-client-integration.md
 │   ├── publishing-checklist.md
 │   ├── references.md
 │   └── session-notes.md
 ├── toolbox/
+│   ├── README.md
 │   └── tools.example.yaml
 ├── screenshots/
-│   └── README.md
+│   ├── README.md
+│   ├── agent-platform-cache-spans.png
+│   ├── agent-runtime-trace-dag.png
+│   ├── gemini-cli-latency-comparison.png
+│   └── gemini-cli-token-savings.png
 └── demos/
+    ├── README.md
     └── finops-cloud-agent/
         ├── app/
+        │   ├── README.md
         │   ├── agent.py
         │   └── instructions.md
         ├── config/
+        │   ├── README.md
         │   ├── dev.env.example
         │   └── prod.env.example
         ├── pyproject.toml
